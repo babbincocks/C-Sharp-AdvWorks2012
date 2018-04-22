@@ -40,8 +40,11 @@ DENY DELETE ON SCHEMA :: Person TO AdvWorks2012
 DENY INSERT ON SCHEMA :: Person TO AdvWorks2012
 DENY UPDATE ON SCHEMA :: Person TO AdvWorks2012
 DENY TAKE OWNERSHIP ON SCHEMA :: Person TO AdvWorks2012
+GRANT EXECUTE ON OBJECT :: dbo.sp_CustomerSalesInfo TO AdvWorks2012
+GRANT EXECUTE ON OBJECT :: dbo.sp_ActiveCustomerNames TO AdvWorks2012
 
 GO
+
 CREATE PROC [dbo].[sp_CustomerSalesInfo]
 (@CustID INT)
 AS
@@ -76,7 +79,7 @@ ORDER BY CustomerID
 END
 GO
 
-EXEC sp_CustomerSalesInfo 14000
+--EXEC sp_CustomerSalesInfo 14001
 
 --SELECT session_id FROM sys.dm_exec_sessions WHERE login_name = 'AdvWorks2012'
 --KILL 53

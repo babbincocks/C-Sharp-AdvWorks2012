@@ -30,7 +30,7 @@
         {
             this.cbCustomers = new System.Windows.Forms.ComboBox();
             this.dgResults = new System.Windows.Forms.DataGridView();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.txtSalesID = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dgResults)).BeginInit();
@@ -49,16 +49,18 @@
             // 
             this.dgResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgResults.Location = new System.Drawing.Point(183, 25);
+            this.dgResults.MultiSelect = false;
             this.dgResults.Name = "dgResults";
             this.dgResults.Size = new System.Drawing.Size(561, 340);
             this.dgResults.TabIndex = 1;
+            this.dgResults.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgResults_CellClick);
             // 
-            // textBox1
+            // txtSalesID
             // 
-            this.textBox1.Location = new System.Drawing.Point(548, 385);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(196, 20);
-            this.textBox1.TabIndex = 2;
+            this.txtSalesID.Location = new System.Drawing.Point(548, 385);
+            this.txtSalesID.Name = "txtSalesID";
+            this.txtSalesID.Size = new System.Drawing.Size(196, 20);
+            this.txtSalesID.TabIndex = 2;
             // 
             // label1
             // 
@@ -85,7 +87,7 @@
             this.ClientSize = new System.Drawing.Size(770, 417);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.txtSalesID);
             this.Controls.Add(this.dgResults);
             this.Controls.Add(this.cbCustomers);
             this.Name = "frmAdvWork2012";
@@ -101,7 +103,7 @@
 
         private System.Windows.Forms.ComboBox cbCustomers;
         private System.Windows.Forms.DataGridView dgResults;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox txtSalesID;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
     }

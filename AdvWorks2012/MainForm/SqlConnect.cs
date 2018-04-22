@@ -6,24 +6,21 @@ using System.Threading.Tasks;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace MainForm
+namespace Databoy
 {
-    class SqlConnect
+    public class SqlConnect
     {
+        const string CONNECTIONSTRING = @"user id=AdvWorks2012;pwd=AW2012;Server=DBPLAPTOP01\LT_SERVER;Database=AdventureWorks2012;Trusted_Connection=False;";
 
-        const string CONNECTIONSTRING = @"Server=PL1\MTCDB;Database=AdventureWorks2012;Trusted_Connection=True;";
-        SqlConnection sqlConn;
+        public static SqlConnection sqlConn = new SqlConnection(CONNECTIONSTRING);
 
-        private bool dataConnect(string connectionString = "")
+        public static bool dataConnect()
         {
             bool returnValue;
 
-            if (connectionString.Length == 0)
-                connectionString = CONNECTIONSTRING;
-
             try
             {
-                sqlConn = new SqlConnection(connectionString);
+                
                 sqlConn.Open();
                 returnValue = true;
             }
@@ -48,7 +45,7 @@ namespace MainForm
 
 
 
-        
+  
 
 }
 
