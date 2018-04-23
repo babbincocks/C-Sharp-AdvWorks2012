@@ -12,8 +12,12 @@ namespace Databoy
     {   //This is the class that handles the connection to the SQL Server.
 
         //First the settings for the connection is created. A string holds all of the information, and is put into a SqlConnection.
-        const string CONNECTIONSTRING = @"user id=AdvWorks2012;pwd=AW2012;Server=DBPLAPTOP01\LT_SERVER;Database=AdventureWorks2012;
+        //const string CONNECTIONSTRING = @"user id=AdvWorks2012;pwd=AW2012;Server=PL1\MTCDB;Database=AdventureWorks2012;
+        //                                    Trusted_Connection=False;";
+
+        const string CONNECTIONSTRING = @"user id=AdvWorks2012;pwd=AW2012;Server=COMEAU-WIN7;Database=AdventureWorks2012;
                                             Trusted_Connection=False;";
+
         public static SqlConnection sqlConn = new SqlConnection(CONNECTIONSTRING);
 
         public static bool dataConnect()

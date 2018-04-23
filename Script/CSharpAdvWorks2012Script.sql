@@ -23,6 +23,10 @@ ALTER LOGIN AdvWorks2012 WITH DEFAULT_DATABASE = AdventureWorks2012
 USE AdventureWorks2012
 
 
+
+
+
+
 --Then an accompanying user profile in the AdventureWorks2012 database is created for the AdvWorks2012 login.
 CREATE USER AdvWorks2012 FOR LOGIN AdvWorks2012
 
@@ -59,6 +63,17 @@ DENY TAKE OWNERSHIP ON SCHEMA :: Person TO AdvWorks2012
 GO
 
 /*
+This is code that checks to see if the stored procedure that's about to be created below this already exists. If it does, it gets rid of that 
+stored procedure, so this script can be run over and over again without any errors.
+*/
+IF (SELECT COUNT(*) FROM dbo.sysobjects WHERE name = 'sp_CustomerSalesInfo') > 0
+BEGIN
+DROP PROC sp_CustomerSalesInfo
+END
+
+GO
+
+/*
 A stored procedure is created for use in the C# program that retrieves many different aspects to a customer's order from various different
 tables, which is joined together through left joins, pretty much purely because not every order has a salesperson associated with it, and
 inner joins would get rid of a lot of orders. Which rows are returned is determined by the value of the variable supplied by the user.
@@ -85,6 +100,16 @@ WHERE SOH.CustomerID = @CustID
 
 END
 GO
+
+
+--Just like before, this checks to see if the next stored procedure already exists, and gets rid of it if it does.
+IF (SELECT COUNT(*) FROM dbo.sysobjects WHERE name = 'sp_ActiveCustomerNames') > 0
+BEGIN
+DROP PROC sp_ActiveCustomerNames
+END
+
+GO
+
 
 /*
 Here's another stored procedure that returns the name and ID of all customers, so it can be used to populate the combo box in the C# program.
