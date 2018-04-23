@@ -1,5 +1,8 @@
 USE master
-
+/*
+First the script checks to see if there's already a login called "AdvWorks2012", and if there is, it gets rid of the login in the master
+database, and then it goes into the AdventureWorks2012 database and deletes the AdvWorks2012 user that goes along with the login.
+*/
 IF (SELECT COUNT(*) FROM master.dbo.syslogins WHERE Name = 'AdvWorks2012') > 0
 BEGIN
 
@@ -10,17 +13,25 @@ USE master
 
 END
 
-
+/*
+Then it creates a login called AdvWorks2012, and assigns it a password of AW2012. Then, just because, the default database is set to 
+the AdventureWorks2012 database, as that's pretty much all it'll be working with, ever.
+*/
 CREATE LOGIN AdvWorks2012 WITH PASSWORD = 'AW2012'
 ALTER LOGIN AdvWorks2012 WITH DEFAULT_DATABASE = AdventureWorks2012
 
 USE AdventureWorks2012
 
+
+--Then an accompanying user profile in the AdventureWorks2012 database is created for the AdvWorks2012 login.
 CREATE USER AdvWorks2012 FOR LOGIN AdvWorks2012
 
+--This user profile is then added to both the datareader and datawriter roles, so it can actually access information in AdventureWorks2012.
 ALTER ROLE db_datareader ADD MEMBER AdvWorks2012
 ALTER ROLE db_datawriter ADD MEMBER AdvWorks2012
 
+--As this user shouldn't be able to interact with the HumanResources scheme, and just to be thorough and safe, every single aspect of 
+--interaction is denied on the HumanResources schema.
 DENY ALTER ON SCHEMA :: HumanResources TO AdvWorks2012
 DENY CONTROL ON SCHEMA :: HumanResources TO AdvWorks2012
 DENY CREATE SEQUENCE ON SCHEMA :: HumanResources TO AdvWorks2012
@@ -34,17 +45,26 @@ DENY UPDATE ON SCHEMA :: HumanResources TO AdvWorks2012
 DENY VIEW CHANGE TRACKING ON SCHEMA :: HumanResources TO AdvWorks2012
 DENY VIEW DEFINITION ON SCHEMA :: HumanResources TO AdvWorks2012
 
+--Then, as we want the user to be able to read data from the Person schema, but pretty much nothing else to it, all of the aspects related to
+--writing data or DDL is denied in the Person schema.
 DENY ALTER ON SCHEMA :: Person TO AdvWorks2012
 DENY CREATE SEQUENCE ON SCHEMA :: Person TO AdvWorks2012
 DENY DELETE ON SCHEMA :: Person TO AdvWorks2012
 DENY INSERT ON SCHEMA :: Person TO AdvWorks2012
 DENY UPDATE ON SCHEMA :: Person TO AdvWorks2012
 DENY TAKE OWNERSHIP ON SCHEMA :: Person TO AdvWorks2012
-GRANT EXECUTE ON OBJECT :: dbo.sp_CustomerSalesInfo TO AdvWorks2012
-GRANT EXECUTE ON OBJECT :: dbo.sp_ActiveCustomerNames TO AdvWorks2012
+
+
 
 GO
 
+/*
+A stored procedure is created for use in the C# program that retrieves many different aspects to a customer's order from various different
+tables, which is joined together through left joins, pretty much purely because not every order has a salesperson associated with it, and
+inner joins would get rid of a lot of orders. Which rows are returned is determined by the value of the variable supplied by the user.
+
+This is created to populate the data grid in the C# application.
+*/
 CREATE PROC [dbo].[sp_CustomerSalesInfo]
 (@CustID INT)
 AS
@@ -66,6 +86,11 @@ WHERE SOH.CustomerID = @CustID
 END
 GO
 
+/*
+Here's another stored procedure that returns the name and ID of all customers, so it can be used to populate the combo box in the C# program.
+This combo box is going to be created so the user doesn't need to know any customer ID's, and can instead look up records by a customer's 
+name, which are guaranteed to be in the database.
+*/
 CREATE PROC [dbo].[sp_ActiveCustomerNames]
 AS
 BEGIN
@@ -79,7 +104,8 @@ ORDER BY CustomerID
 END
 GO
 
---EXEC sp_CustomerSalesInfo 14001
+--Finally, the user is granted the ability to execute these stored procedures that have been created.
+GRANT EXECUTE ON OBJECT :: dbo.sp_CustomerSalesInfo TO AdvWorks2012
+GRANT EXECUTE ON OBJECT :: dbo.sp_ActiveCustomerNames TO AdvWorks2012
 
---SELECT session_id FROM sys.dm_exec_sessions WHERE login_name = 'AdvWorks2012'
---KILL 53
+
